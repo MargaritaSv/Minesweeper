@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 /**
  * Created by margarita on 3/30/16.
@@ -20,7 +21,7 @@ public class MineSweeper implements ActionListener {
     Container grid = new Container();
 
     public MineSweeper() {
-        frame.setSize(200, 200);
+        frame.setSize(1200, 800);
         frame.setLayout(new BorderLayout());
         frame.add(reset, BorderLayout.NORTH);
 
@@ -41,11 +42,8 @@ public class MineSweeper implements ActionListener {
 
     public void createRandomMines() {
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < counts.length; i++) {
-            for (int j = 0; j < counts[0].length; j++) {
-                list.add(i * 100 + j);
-            }
-        }
+
+        IntStream.range(0, counts.length).forEach(i -> IntStream.range(0, counts[0].length).forEach(j -> list.add(i * 100 + j)));
 
         //reset counts,pick out 30 mines
         counts = new int[20][20];
@@ -103,7 +101,7 @@ public class MineSweeper implements ActionListener {
             for (int x = 0; x < buttons.length; x++) {
                 for (int y = 0; y < buttons[0].length; y++) {
                     if (event.getSource().equals(buttons[x][y])) {
-                        buttons[x][y].setText(counts[x][y] + "");
+                        buttons[x][y].setText(counts[x][y] + " ");
                         buttons[x][y].setEnabled(false);
                     }
                 }
