@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class MineSweeper implements ActionListener {
 
-    final int MINE = 0;
+    final char MINE = 'X';
 
     JFrame frame = new JFrame("Minesweeper");
     JButton reset = new JButton("Reset");
@@ -51,7 +51,7 @@ public class MineSweeper implements ActionListener {
         counts = new int[20][20];
         for (int a = 0; a < 30; a++) {
             int choice = (int) (Math.random() * list.size());
-            counts[list.get(choice)][list.get(choice) % 100] = MINE;
+            counts[list.get(choice) / 100][list.get(choice) % 100] = MINE;
             list.remove(choice);
         }
 
@@ -79,8 +79,35 @@ public class MineSweeper implements ActionListener {
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void lostGame() {
+        for (int i = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[0].length; j++) {
+                if (buttons[i][j].isEnabled()) {
+                    if (counts[i][j] != MINE) {
+                        buttons[i][j].setText(counts[i][j] + "");
+                        buttons[i][j].setEnabled(false);
+                    } else {
+                        buttons[i][j].setText("X");
+                        buttons[i][j].setEnabled(false);
+                    }
+                }
+            }
+        }
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (event.getSource().equals(reset)) {
+            // TODO: reset the board
+        } else {
+            for (int x = 0; x < buttons.length; x++) {
+                for (int y = 0; y < buttons[0].length; y++) {
+                    if (event.getSource().equals(buttons[x][y])) {
+                        buttons[x][y].setText(counts[x][y] + "");
+                        buttons[x][y].setEnabled(false);
+                    }
+                }
+            }
+        }
     }
 }
