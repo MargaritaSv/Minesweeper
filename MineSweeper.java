@@ -77,13 +77,30 @@ public class MineSweeper implements ActionListener {
         }
     }
 
+    public void checkWin() {
+        boolean won = false;
+        for (int x = 0; x < counts.length; x++) {
+            for (int y = 0; y < counts[0].length; y++) {
+                if (counts[x][y] != MINE && buttons[x][y].isEnabled()) {
+                    won = false;
+                }
+            }
+        }
+
+        if (won == true) {
+            JOptionPane.showMessageDialog(frame, "You win!");
+        }
+    }
+
     public void lostGame() {
         for (int i = 0; i < buttons.length; i++) {
             for (int j = 0; j < buttons[0].length; j++) {
+
                 if (buttons[i][j].isEnabled()) {
                     if (counts[i][j] != MINE) {
                         buttons[i][j].setText(counts[i][j] + "");
                         buttons[i][j].setEnabled(false);
+
                     } else if (counts[i][j] == 0) {
                         buttons[i][j].setText(counts[i][j] + "");
                         buttons[i][j].setEnabled(false);
@@ -91,11 +108,12 @@ public class MineSweeper implements ActionListener {
                         ArrayList<Integer> massive = new ArrayList<>();
                         massive.add(i * 100 + j);
                         clearZeroes(massive);
-
+                        checkWin();
                     }
                 } else {
                     buttons[i][j].setText("X");
                     buttons[i][j].setEnabled(false);
+                    checkWin();
                 }
             }
         }
@@ -112,7 +130,7 @@ public class MineSweeper implements ActionListener {
             toClear.remove(0);
             if (counts[x][y] == 0) {
 
-                if (x > 0 && y > 0) {  //up left
+                if (x > 0 && y > 0 && buttons[x - 1][y - 1].isEnabled()) {  //up left
                     buttons[x - 1][y - 1].setText(counts[x - 1][y - 1] + "");
                     buttons[x - 1][y - 1].setEnabled(false);
                     if (counts[x - 1][y - 1] == 0) {
@@ -120,7 +138,7 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (y > 0) {  //up
+                if (y > 0 && buttons[x][y - 1].isEnabled()) {  //up
                     buttons[x][y - 1].setText(counts[x][y - 1] + "");
                     buttons[x][y - 1].setEnabled(false);
                     if (counts[x][y - 1] == 0) {
@@ -128,7 +146,7 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (x < counts.length - 1 && y > 0) {  //up right
+                if (x < counts.length - 1 && y > 0 && buttons[x + 1][y - 1].isEnabled()) {  //up right
                     buttons[x + 1][y - 1].setText(counts[x + 1][y - 1] + "");
                     buttons[x + 1][y - 1].setEnabled(false);
                     if (counts[x + 1][y - 1] == 0) {
@@ -136,7 +154,7 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (x > 0) {  // left
+                if (x > 0 && buttons[x - 1][y].isEnabled()) {  // left
                     buttons[x - 1][y].setText(counts[x - 1][y] + "");
                     buttons[x - 1][y].setEnabled(false);
                     if (counts[x - 1][y] == 0) {
@@ -144,7 +162,7 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (x < counts.length - 1) {
+                if (x < counts.length - 1 && buttons[x + 1][y].isEnabled()) { //right
                     buttons[x + 1][y].setText(counts[x + 1][y] + "");
                     buttons[x + 1][y].setEnabled(false);
                     if (counts[x + 1][y] == 0) {
@@ -152,7 +170,7 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (x > 0 && y < counts[0].length - 1) {  //down left
+                if (x > 0 && y < counts[0].length - 1 && buttons[x - 1][y + 1].isEnabled()) {  //down left
                     buttons[x - 1][y + 1].setText(counts[x - 1][y + 1] + "");
                     buttons[x - 1][y + 1].setEnabled(false);
                     if (counts[x - 1][y + 1] == 0) {
@@ -160,7 +178,7 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (y < counts[0].length - 1) {  //down
+                if (y < counts[0].length - 1 && buttons[x][y - 1].isEnabled()) {  //down
                     buttons[x][y - 1].setText(counts[x][y - 1] + "");
                     buttons[x][y - 1].setEnabled(false);
                     if (counts[x][y - 1] == 0) {
@@ -168,14 +186,14 @@ public class MineSweeper implements ActionListener {
                     }
                 }
 
-                if (x < counts.length - 1 && y < counts[0].length - 1) { //down right
+                if (x < counts.length - 1 && y < counts[0].length - 1 && buttons[x + 1][y + 1].isEnabled()) { //down right
                     buttons[x + 1][y + 1].setText(counts[x + 1][y + 1] + "");
                     buttons[x + 1][y + 1].setEnabled(false);
                     if (counts[x + 1][y + 1] == 0) {
                         toClear.add((x + 1) * 100 + (y + 1));
                     }
-
                 }
+
             }
             clearZeroes(toClear);
         }
@@ -188,9 +206,16 @@ public class MineSweeper implements ActionListener {
         } else {
             for (int x = 0; x < buttons.length; x++) {
                 for (int y = 0; y < buttons[0].length; y++) {
+
                     if (event.getSource().equals(buttons[x][y])) {
-                        buttons[x][y].setText(counts[x][y] + " ");
-                        buttons[x][y].setEnabled(false);
+                        if (counts[x][y] == MINE) {
+                            buttons[x][y].setText(counts[x][y] + "");
+                            buttons[x][y].setText("X");
+                            lostGame();
+                        } else {
+                            buttons[x][y].setText(counts[x][y] + "");
+                            buttons[x][y].setEnabled(false);
+                        }
                     }
                 }
             }
