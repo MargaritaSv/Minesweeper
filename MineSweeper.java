@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  */
 public class MineSweeper implements ActionListener {
 
-    final char MINE = 'X';
+    final char MINE = '@';
 
     JFrame frame = new JFrame("Minesweeper");
     JButton reset = new JButton("Reset");
@@ -54,24 +54,44 @@ public class MineSweeper implements ActionListener {
         }
 
         //initialize neighbor counts
-        for (int i = 0; i < counts.length; i++) {
-            for (int j = 0; j < counts[0].length; j++) {
+        for (int x = 0; x < counts.length; x++) {
+            for (int y = 0; y < counts[0].length; y++) {
 
                 int neighborCounts = 0;
-                if (counts[i][j] != MINE) {
-                    if (i > 0 && j > 0 && counts[i - 1][j - 1] == MINE) {
+                if (counts[x][y] != MINE) {
+                    if (x > 0 && y > 0 && counts[x - 1][y - 1] == MINE) {
                         neighborCounts++;
                     }
 
-                    if (j > 0 && counts[i][j - 1] == MINE) {
+                    if (y > 0 && counts[x][y - 1] == MINE) {
                         neighborCounts++;
                     }
 
-                    if (i < counts.length - 1 && j < counts[0].length - 1 && counts[i + 1][j + 1] == MINE) {
+                    if (x < counts.length - 1 && y < counts[0].length - 1 && counts[x + 1][y + 1] == MINE) {
                         neighborCounts++;
                     }
 
-                    counts[i][j] = neighborCounts;
+                    if (x < counts.length - 1 && y > 0 && counts[x + 1][y - 1] == MINE) { //up right
+                        neighborCounts++;
+                    }
+
+                    if (x > 0 && y < counts[0].length - 1 && counts[x - 1][y + 1] == MINE) { //down right
+                        neighborCounts++;
+                    }
+
+                    if (y < counts[0].length - 1 && counts[x][y + 1] == MINE) { //down
+                        neighborCounts++;
+                    }
+
+                    if (x > 0 && y < 0 && counts[x - 1][y - 1] == MINE) { //down right
+                        neighborCounts++;
+                    }
+
+                    if (x > 0 && counts[x - 1][y] == MINE) { //right
+                        neighborCounts++;
+                    }
+
+                    counts[x][y] = neighborCounts;
                 }
             }
         }
@@ -104,16 +124,16 @@ public class MineSweeper implements ActionListener {
                     } else if (counts[i][j] == 0) {
                         buttons[i][j].setText(counts[i][j] + "");
                         buttons[i][j].setEnabled(false);
-
                         ArrayList<Integer> massive = new ArrayList<>();
                         massive.add(i * 100 + j);
                         clearZeroes(massive);
                         checkWin();
+
+                    } else {
+                        buttons[i][j].setText("X");
+                        buttons[i][j].setEnabled(false);
+                        checkWin();
                     }
-                } else {
-                    buttons[i][j].setText("X");
-                    buttons[i][j].setEnabled(false);
-                    checkWin();
                 }
             }
         }
@@ -210,7 +230,7 @@ public class MineSweeper implements ActionListener {
                     if (event.getSource().equals(buttons[x][y])) {
                         if (counts[x][y] == MINE) {
                             buttons[x][y].setText(counts[x][y] + "");
-                            buttons[x][y].setText("X");
+                            buttons[x][y].setText("BOOM");
                             lostGame();
                         } else {
                             buttons[x][y].setText(counts[x][y] + "");
