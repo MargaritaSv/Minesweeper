@@ -82,10 +82,10 @@ public class MineSweeper implements ActionListener {
     }
 
     public void checkWin() {
-        boolean won = false;
+        boolean won = true;
         for (int x = 0; x < counts.length; x++) {
             for (int y = 0; y < counts[0].length; y++) {
-                if (counts[x][y] != MINE && buttons[x][y].isEnabled()) {
+                if (counts[x][y] != MINE && buttons[x][y].isEnabled() == true) {
                     won = false;
                 }
             }
@@ -104,12 +104,10 @@ public class MineSweeper implements ActionListener {
                     if (counts[i][j] != MINE) {
                         buttons[i][j].setText(counts[i][j] + "");
                         buttons[i][j].setEnabled(false);
-
+                    } else {
+                        buttons[i][j].setText(counts[i][j] + "X");
+                        buttons[i][j].setEnabled(false);
                     }
-                } else {
-                    buttons[i][j].setText(counts[i][j] + "");
-                    buttons[i][j].setEnabled(false);
-                    checkWin();
                 }
             }
         }
@@ -123,70 +121,68 @@ public class MineSweeper implements ActionListener {
             int y = toClear.get(0) % 100;
 
             toClear.remove(0);
-            if (counts[x][y] == 0) {
 
-                if (x > 0 && y > 0 && buttons[x - 1][y - 1].isEnabled()) {  //up left
-                    buttons[x - 1][y - 1].setText(counts[x - 1][y - 1] + "");
-                    buttons[x - 1][y - 1].setEnabled(false);
-                    if (counts[x - 1][y - 1] == 0) {
-                        toClear.add((x - 1) * 100 + (y - 1));
-                    }
+            if (x > 0 && y > 0 && buttons[x - 1][y - 1].isEnabled()) {  //up left
+                buttons[x - 1][y - 1].setText(counts[x - 1][y - 1] + "");
+                buttons[x - 1][y - 1].setEnabled(false);
+                if (counts[x - 1][y - 1] == 0) {
+                    toClear.add((x - 1) * 100 + (y - 1));
                 }
+            }
 
-                if (y > 0 && buttons[x][y - 1].isEnabled()) {  //up
-                    buttons[x][y - 1].setText(counts[x][y - 1] + "");
-                    buttons[x][y - 1].setEnabled(false);
-                    if (counts[x][y - 1] == 0) {
-                        toClear.add((x) * 100 + (y - 1));
-                    }
+            if (y > 0 && buttons[x][y - 1].isEnabled()) {  //up
+                buttons[x][y - 1].setText(counts[x][y - 1] + "");
+                buttons[x][y - 1].setEnabled(false);
+                if (counts[x][y - 1] == 0) {
+                    toClear.add((x) * 100 + (y - 1));
                 }
+            }
 
-                if (x < counts.length - 1 && y > 0 && buttons[x + 1][y - 1].isEnabled()) {  //up right
-                    buttons[x + 1][y - 1].setText(counts[x + 1][y - 1] + "");
-                    buttons[x + 1][y - 1].setEnabled(false);
-                    if (counts[x + 1][y - 1] == 0) {
-                        toClear.add((x + 1) * 100 + (y - 1));
-                    }
+            if (x < counts.length - 1 && y > 0 && buttons[x + 1][y - 1].isEnabled()) {  //up right
+                buttons[x + 1][y - 1].setText(counts[x + 1][y - 1] + "");
+                buttons[x + 1][y - 1].setEnabled(false);
+                if (counts[x + 1][y - 1] == 0) {
+                    toClear.add((x + 1) * 100 + (y - 1));
                 }
+            }
 
-                if (x > 0 && buttons[x - 1][y].isEnabled()) {  // left
-                    buttons[x - 1][y].setText(counts[x - 1][y] + "");
-                    buttons[x - 1][y].setEnabled(false);
-                    if (counts[x - 1][y] == 0) {
-                        toClear.add((x - 1) * 100 + (y));
-                    }
+            if (x > 0 && buttons[x - 1][y].isEnabled()) {  // left
+                buttons[x - 1][y].setText(counts[x - 1][y] + "");
+                buttons[x - 1][y].setEnabled(false);
+                if (counts[x - 1][y] == 0) {
+                    toClear.add((x - 1) * 100 + (y));
                 }
+            }
 
-                if (x < counts.length - 1 && buttons[x + 1][y].isEnabled()) { //right
-                    buttons[x + 1][y].setText(counts[x + 1][y] + "");
-                    buttons[x + 1][y].setEnabled(false);
-                    if (counts[x + 1][y] == 0) {
-                        toClear.add((x + 1) * 100 + y);
-                    }
+            if (x < counts.length - 1 && buttons[x + 1][y].isEnabled()) { //right
+                buttons[x + 1][y].setText(counts[x + 1][y] + "");
+                buttons[x + 1][y].setEnabled(false);
+                if (counts[x + 1][y] == 0) {
+                    toClear.add((x + 1) * 100 + y);
                 }
+            }
 
-                if (x > 0 && y < counts[0].length - 1 && buttons[x - 1][y + 1].isEnabled()) {  //down left
-                    buttons[x - 1][y + 1].setText(counts[x - 1][y + 1] + "");
-                    buttons[x - 1][y + 1].setEnabled(false);
-                    if (counts[x - 1][y + 1] == 0) {
-                        toClear.add((x - 1) * 100 + (y + 1));
-                    }
+            if (x > 0 && y < counts[0].length - 1 && buttons[x - 1][y + 1].isEnabled()) {  //down left
+                buttons[x - 1][y + 1].setText(counts[x - 1][y + 1] + "");
+                buttons[x - 1][y + 1].setEnabled(false);
+                if (counts[x - 1][y + 1] == 0) {
+                    toClear.add((x - 1) * 100 + (y + 1));
                 }
+            }
 
-                if (y < counts[0].length - 1 && buttons[x][y - 1].isEnabled()) {  //down
-                    buttons[x][y - 1].setText(counts[x][y - 1] + "");
-                    buttons[x][y - 1].setEnabled(false);
-                    if (counts[x][y - 1] == 0) {
-                        toClear.add((x) * 100 + (y - 1));
-                    }
+            if (y < counts[0].length - 1 && buttons[x][y - 1].isEnabled()) {  //down
+                buttons[x][y - 1].setText(counts[x][y - 1] + "");
+                buttons[x][y - 1].setEnabled(false);
+                if (counts[x][y - 1] == 0) {
+                    toClear.add((x) * 100 + (y - 1));
                 }
+            }
 
-                if (x < counts.length - 1 && y < counts[0].length - 1 && buttons[x + 1][y + 1].isEnabled()) { //down right
-                    buttons[x + 1][y + 1].setText(counts[x + 1][y + 1] + "");
-                    buttons[x + 1][y + 1].setEnabled(false);
-                    if (counts[x + 1][y + 1] == 0) {
-                        toClear.add((x + 1) * 100 + (y + 1));
-                    }
+            if (x < counts.length - 1 && y < counts[0].length - 1 && buttons[x + 1][y + 1].isEnabled()) { //down right
+                buttons[x + 1][y + 1].setText(counts[x + 1][y + 1] + "");
+                buttons[x + 1][y + 1].setEnabled(false);
+                if (counts[x + 1][y + 1] == 0) {
+                    toClear.add((x + 1) * 100 + (y + 1));
                 }
             }
             clearZeroes(toClear);
@@ -196,7 +192,14 @@ public class MineSweeper implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource().equals(reset)) {
-            // TODO: reset the board
+            for (int x = 0; x < buttons.length; x++) {
+                for (int y = 0; y < buttons[0].length; y++) {
+                    buttons[x][y].setEnabled(true);
+                    buttons[x][y].setText("");
+                }
+            }
+            createRandomMines();
+
         } else {
             for (int x = 0; x < buttons.length; x++) {
                 for (int y = 0; y < buttons[0].length; y++) {
