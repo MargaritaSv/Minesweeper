@@ -59,15 +59,11 @@ public class MineSweeper implements ActionListener {
 
                 int neighborCounts = 0;
                 if (counts[x][y] != MINE) {
-                    if (x > 0 && y > 0 && counts[x - 1][y - 1] == MINE) {
+                    if (x > 0 && y > 0 && counts[x - 1][y - 1] == MINE) {  //up left
                         neighborCounts++;
                     }
 
-                    if (y > 0 && counts[x][y - 1] == MINE) {
-                        neighborCounts++;
-                    }
-
-                    if (x < counts.length - 1 && y < counts[0].length - 1 && counts[x + 1][y + 1] == MINE) {
+                    if (y > 0 && counts[x][y - 1] == MINE) {    //up
                         neighborCounts++;
                     }
 
@@ -75,7 +71,11 @@ public class MineSweeper implements ActionListener {
                         neighborCounts++;
                     }
 
-                    if (x > 0 && y < counts[0].length - 1 && counts[x - 1][y + 1] == MINE) { //down right
+                    if (x > 0 && counts[x - 1][y] == MINE) { //right
+                        neighborCounts++;
+                    }
+
+                    if (x < counts.length - 1 && y < counts[0].length - 1 && counts[x + 1][y + 1] == MINE) { //down right !!
                         neighborCounts++;
                     }
 
@@ -87,7 +87,7 @@ public class MineSweeper implements ActionListener {
                         neighborCounts++;
                     }
 
-                    if (x > 0 && counts[x - 1][y] == MINE) { //right
+                    if (x > 0 && y < counts[0].length-1 && counts[x - 1][y + 1] == MINE) {  //left
                         neighborCounts++;
                     }
 
