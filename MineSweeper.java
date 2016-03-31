@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  */
 public class MineSweeper implements ActionListener {
 
-    final char MINE = '@';
+    final int MINE = 10;
 
     JFrame frame = new JFrame("Minesweeper");
     JButton reset = new JButton("Reset");
@@ -63,19 +63,7 @@ public class MineSweeper implements ActionListener {
                         neighborCounts++;
                     }
 
-                    if (y > 0 && counts[x][y - 1] == MINE) {    //up
-                        neighborCounts++;
-                    }
-
                     if (x < counts.length - 1 && y > 0 && counts[x + 1][y - 1] == MINE) { //up right
-                        neighborCounts++;
-                    }
-
-                    if (x > 0 && counts[x - 1][y] == MINE) { //right
-                        neighborCounts++;
-                    }
-
-                    if (x < counts.length - 1 && y < counts[0].length - 1 && counts[x + 1][y + 1] == MINE) { //down right !!
                         neighborCounts++;
                     }
 
@@ -83,11 +71,7 @@ public class MineSweeper implements ActionListener {
                         neighborCounts++;
                     }
 
-                    if (x > 0 && y < 0 && counts[x - 1][y - 1] == MINE) { //down right
-                        neighborCounts++;
-                    }
-
-                    if (x > 0 && y < counts[0].length-1 && counts[x - 1][y + 1] == MINE) {  //left
+                    if (x > 0 && y < counts[0].length - 1 && counts[x - 1][y + 1] == MINE) {  //left
                         neighborCounts++;
                     }
 
@@ -121,24 +105,15 @@ public class MineSweeper implements ActionListener {
                         buttons[i][j].setText(counts[i][j] + "");
                         buttons[i][j].setEnabled(false);
 
-                    } else if (counts[i][j] == 0) {
-                        buttons[i][j].setText(counts[i][j] + "");
-                        buttons[i][j].setEnabled(false);
-                        ArrayList<Integer> massive = new ArrayList<>();
-                        massive.add(i * 100 + j);
-                        clearZeroes(massive);
-                        checkWin();
-
-                    } else {
-                        buttons[i][j].setText("X");
-                        buttons[i][j].setEnabled(false);
-                        checkWin();
                     }
+                } else {
+                    buttons[i][j].setText(counts[i][j] + "");
+                    buttons[i][j].setEnabled(false);
+                    checkWin();
                 }
             }
         }
     }
-
 
     private void clearZeroes(ArrayList<Integer> toClear) {
         if (toClear.size() == 0) {
@@ -213,7 +188,6 @@ public class MineSweeper implements ActionListener {
                         toClear.add((x + 1) * 100 + (y + 1));
                     }
                 }
-
             }
             clearZeroes(toClear);
         }
@@ -229,12 +203,22 @@ public class MineSweeper implements ActionListener {
 
                     if (event.getSource().equals(buttons[x][y])) {
                         if (counts[x][y] == MINE) {
-                            buttons[x][y].setText(counts[x][y] + "");
-                            buttons[x][y].setText("BOOM");
+                            buttons[x][y].setForeground(Color.red);
+                            buttons[x][y].setText("X");
                             lostGame();
+
+                        } else if (counts[x][y] == 0) {
+                            buttons[x][y].setText(counts[x][y] + "");
+                            buttons[x][y].setEnabled(false);
+                            ArrayList<Integer> massive = new ArrayList<>();
+                            massive.add(x * 100 + y);
+                            clearZeroes(massive);
+                            checkWin();
+
                         } else {
                             buttons[x][y].setText(counts[x][y] + "");
                             buttons[x][y].setEnabled(false);
+                            checkWin();
                         }
                     }
                 }
